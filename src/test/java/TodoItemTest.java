@@ -140,12 +140,12 @@ public class TodoItemTest {
     }
 
     @Test
-    void testGetSummary() {
+    void testToString() {
         Person creator = createTestPerson();
-        LocalDate deadline = LocalDate.of(2025, 12, 31);
-        TodoItem todoItem = new TodoItem(12, "Summary Test", "Test description", deadline, creator);
-        String expectedSummary = String.format("{id: 12, title: Summary Test, description: Test description, deadLine: %s, done: false, creator: {id: 1, name: Test Creator, email: test.creator@example.com}}", deadline);
-        assertEquals(expectedSummary, todoItem.getSummary());
+        LocalDate deadline = LocalDate.of(2025, 1, 1);
+        TodoItem todoItem = new TodoItem(1, "Test String", "Description", deadline, creator);
+        String expectedString = "TodoItem{id=1, title=\'Test String\', description=\'Description\', deadLine=2025-01-01, done=false}";
+        assertEquals(expectedString, todoItem.toString());
     }
 
     @Test
@@ -170,15 +170,9 @@ public class TodoItemTest {
         assertNotEquals(item1, item4);
         assertNotEquals(item1, item5);
         assertNotEquals(item1, item6);
-        assertNotEquals(item1, item7);
-    }
-
-    @Test
-    void testToString() {
-        Person creator = createTestPerson();
-        LocalDate deadline = LocalDate.of(2025, 1, 1);
-        TodoItem todoItem = new TodoItem(1, "Test String", "Description", deadline, creator);
-        String expectedString = "TodoItem{id=1, title=\'Test String\', description=\'Description\', deadLine=2025-01-01, done=false, creator=Person{id=1, firstName=\'Test\', lastName=\'Creator\', email=\'test.creator@example.com\'}}";
-        assertEquals(expectedString, todoItem.toString());
+        // item7 should be equal to item1 because creator is excluded from equals/hashCode
+        assertEquals(item1, item7);
+        assertEquals(item1.hashCode(), item7.hashCode());
     }
 }
+

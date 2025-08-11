@@ -41,25 +41,18 @@ public class TodoItemTask {
         return this.assignee != null;
     }
 
-    public String getSummary() {
-        return String.format("{id: %d, assigned: %b, todoItem: %s, assignee: %s}",
-                id, isAssigned(), todoItem.getSummary(),
-                assignee != null ? assignee.getSummary() : "null");
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         TodoItemTask that = (TodoItemTask) o;
         return id == that.id &&
-                Objects.equals(todoItem, that.todoItem) &&
-                Objects.equals(assignee, that.assignee);
+                Objects.equals(todoItem, that.todoItem);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, todoItem, assignee);
+        return Objects.hash(id, todoItem);
     }
 
     @Override
@@ -67,7 +60,7 @@ public class TodoItemTask {
         return "TodoItemTask{" +
                 "id=" + id +
                 ", todoItem=" + todoItem +
-                ", assignee=" + assignee +
+                ", assigned=" + isAssigned() +
                 "}";
     }
 }

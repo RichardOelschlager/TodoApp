@@ -84,20 +84,18 @@ public class TodoItemTaskTest {
     }
 
     @Test
-    void testGetSummary() {
+    void testToString() {
         Person creator = createTestPerson(1, "John", "Doe", "john.doe@example.com");
-        TodoItem todoItem = createTestTodoItem(1, "Summary Task", "Summary Desc", LocalDate.now().plusDays(1), creator);
+        TodoItem todoItem = createTestTodoItem(1, "Task Title", "Task Description", LocalDate.now().plusDays(1), creator);
         Person assignee = createTestPerson(2, "Jane", "Smith", "jane.smith@example.com");
 
-        TodoItemTask taskWithAssignee = new TodoItemTask(6, todoItem, assignee);
-        String expectedSummaryWithAssignee = String.format("{id: 6, assigned: true, todoItem: %s, assignee: %s}",
-                todoItem.getSummary(), assignee.getSummary());
-        assertEquals(expectedSummaryWithAssignee, taskWithAssignee.getSummary());
+        TodoItemTask task = new TodoItemTask(1, todoItem, assignee);
+        String expectedString = "TodoItemTask{id=1, todoItem=TodoItem{id=1, title=\'Task Title\', description=\'Task Description\', deadLine=" + LocalDate.now().plusDays(1) + ", done=false}, assigned=true}";
+        assertEquals(expectedString, task.toString());
 
-        TodoItemTask taskWithoutAssignee = new TodoItemTask(7, todoItem, null);
-        String expectedSummaryWithoutAssignee = String.format("{id: 7, assigned: false, todoItem: %s, assignee: null}",
-                todoItem.getSummary());
-        assertEquals(expectedSummaryWithoutAssignee, taskWithoutAssignee.getSummary());
+        TodoItemTask taskWithoutAssignee = new TodoItemTask(2, todoItem, null);
+        String expectedStringWithoutAssignee = "TodoItemTask{id=2, todoItem=TodoItem{id=1, title=\'Task Title\', description=\'Task Description\', deadLine=" + LocalDate.now().plusDays(1) + ", done=false}, assigned=false}";
+        assertEquals(expectedStringWithoutAssignee, taskWithoutAssignee.toString());
     }
 
     @Test
@@ -112,30 +110,17 @@ public class TodoItemTaskTest {
         TodoItemTask task2 = new TodoItemTask(1, todoItem1, assignee1);
         TodoItemTask task3 = new TodoItemTask(2, todoItem1, assignee1);
         TodoItemTask task4 = new TodoItemTask(1, todoItem2, assignee1);
-        TodoItemTask task5 = new TodoItemTask(1, todoItem1, assignee2);
-        TodoItemTask task6 = new TodoItemTask(1, todoItem1, null);
+        TodoItemTask task5 = new TodoItemTask(1, todoItem1, assignee2); // Assignee is excluded from equals/hashCode
+        TodoItemTask task6 = new TodoItemTask(1, todoItem1, null); // Assignee is excluded from equals/hashCode
 
         assertEquals(task1, task2);
         assertEquals(task1.hashCode(), task2.hashCode());
 
         assertNotEquals(task1, task3);
         assertNotEquals(task1, task4);
-        assertNotEquals(task1, task5);
-        assertNotEquals(task1, task6);
-    }
-
-    @Test
-    void testToString() {
-        Person creator = createTestPerson(1, "John", "Doe", "john.doe@example.com");
-        TodoItem todoItem = createTestTodoItem(1, "Task Title", "Task Description", LocalDate.now().plusDays(1), creator);
-        Person assignee = createTestPerson(2, "Jane", "Smith", "jane.smith@example.com");
-
-        TodoItemTask task = new TodoItemTask(1, todoItem, assignee);
-        String expectedString = "TodoItemTask{id=1, todoItem=TodoItem{id=1, title=\'Task Title\', description=\'Task Description\', deadLine=" + LocalDate.now().plusDays(1) + ", done=false, creator=Person{id=1, firstName=\'John\', lastName=\'Doe\', email=\'john.doe@example.com\'}}, assignee=Person{id=2, firstName=\'Jane\', lastName=\'Smith\', email=\'jane.smith@example.com\'}}";
-        assertEquals(expectedString, task.toString());
-
-        TodoItemTask taskWithoutAssignee = new TodoItemTask(2, todoItem, null);
-        String expectedStringWithoutAssignee = "TodoItemTask{id=2, todoItem=TodoItem{id=1, title=\'Task Title\', description=\'Task Description\', deadLine=" + LocalDate.now().plusDays(1) + ", done=false, creator=Person{id=1, firstName=\'John\', lastName=\'Doe\', email=\'john.doe@example.com\'}}, assignee=null}";
-        assertEquals(expectedStringWithoutAssignee, taskWithoutAssignee.toString());
+        assertEquals(task1, task5);
+        assertEquals(task1.hashCode(), task5.hashCode());
+        assertEquals(task1, task6);
+        assertEquals(task1.hashCode(), task6.hashCode());
     }
 }

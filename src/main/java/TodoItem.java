@@ -80,11 +80,6 @@ public class TodoItem {
         this.creator = creator;
     }
 
-    public String getSummary() {
-        return String.format("{id: %d, title: %s, description: %s, deadLine: %s, done: %b, creator: %s}",
-                id, title, description, deadLine, done, creator.getSummary());
-    }
-
     public boolean isOverdue() {
         return LocalDate.now().isAfter(deadLine);
     }
@@ -98,24 +93,22 @@ public class TodoItem {
                 done == todoItem.done &&
                 title.equals(todoItem.title) &&
                 Objects.equals(description, todoItem.description) &&
-                deadLine.equals(todoItem.deadLine) &&
-                creator.equals(todoItem.creator);
+                deadLine.equals(todoItem.deadLine);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, description, deadLine, done, creator);
+        return Objects.hash(id, title, description, deadLine, done);
     }
 
     @Override
     public String toString() {
         return "TodoItem{" +
                 "id=" + id +
-                ", title=\'" + title + "\'" +
-                ", description=\'" + description + "\'" +
-                ", deadLine=" + deadLine +
+                ", title=\'" + title + "\'," +
+                " description=\'" + description + "\'," +
+                " deadLine=" + deadLine +
                 ", done=" + done +
-                ", creator=" + creator +
                 "}";
     }
 }
